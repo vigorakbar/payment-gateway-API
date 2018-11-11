@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
+const Customer = require('../models/Customer');
 
 router.get('/get/:id', function(req, res) {
   var id = req.params.id;
   Customer.findOne({ where: {id} }).then((error, customer) => {
     if (error) throw error;
     res.json({
-      id: customer.id,
+      id: customer.customer_id,
       name: customer.name,
       address: customer.address,
       bank_account: customer.bank_account,
@@ -46,7 +47,7 @@ router.post('/update', function(req, res) {
     bank_account,
     bank_name,
   },{
-    where: { id }
+    where: { customer_id: id }
   }).then((error, response) => {
     if (error) throw error;
     res.json({
@@ -59,7 +60,7 @@ router.post('/update', function(req, res) {
 router.post('/delete', function(req, res) {
   var id = req.body.id;
   Customer.destroy({
-    where: { id },
+    where: { customer_id: id },
   });
 });
 
