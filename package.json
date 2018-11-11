@@ -1,0 +1,22 @@
+{
+  "name": "payment-gateway-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vigorakbar/payment-gateway-API.git"
+  },
+  "author": "vigorakbar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vigorakbar/payment-gateway-API/issues"
+  },
+  "homepage": "https://github.com/vigorakbar/payment-gateway-API#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
