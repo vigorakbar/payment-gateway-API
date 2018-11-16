@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const Merchant = require('../models/Merchant');
 
-router.get('/get/:id', function(req, res) {
+router.get('/:id', function(req, res) {
   var id = req.params.id;
   Merchant.findOne({ where: {id} }).then((error, merchant) => {
     if (error) throw error;
@@ -16,7 +16,7 @@ router.get('/get/:id', function(req, res) {
   });
 });
 
-router.post('/create', function(req, res) {
+router.post('/', function(req, res) {
   var name = req.body.name;
   var address = req.body.address;
   var bank_account = req.body.bank_account;
@@ -35,7 +35,7 @@ router.post('/create', function(req, res) {
   });
 });
 
-router.post('/update', function(req, res) {
+router.put('/', function(req, res) {
   var id = req.body.id;
   var name = req.body.name;
   var address = req.body.address;
@@ -57,7 +57,7 @@ router.post('/update', function(req, res) {
   });
 });
 
-router.post('/delete', function(req, res) {
+router.delete('/', function(req, res) {
   var id = req.body.id;
   Merchant.destroy({
     where: { merchant_id: id },

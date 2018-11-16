@@ -1,17 +1,17 @@
 var express = require('express');
 var router = express.Router();
-const Customer = require('../models/Customer');
+const Transaction = require('../models/Transaction');
 
 router.get('/:id', function(req, res) {
   var id = req.params.id;
-  Customer.findOne({ where: {id} }).then((error, customer) => {
+  Transaction.findOne({ where: {id} }).then((error, transaction) => {
     if (error) throw error;
     res.json({
-      id: customer.customer_id,
-      name: customer.name,
-      address: customer.address,
-      bank_account: customer.bank_account,
-      bank_name: customer.bank_name,
+      id: transaction.transaction_id,
+      name: transaction.name,
+      address: transaction.address,
+      bank_account: transaction.bank_account,
+      bank_name: transaction.bank_name,
     });
   });
 });
@@ -21,7 +21,7 @@ router.post('/', function(req, res) {
   var address = req.body.address;
   var bank_account = req.body.bank_account;
   var bank_name = req.body.bank_name;
-  Customer.create({
+  Transaction.create({
     name,
     address,
     bank_account,
@@ -41,13 +41,13 @@ router.put('/', function(req, res) {
   var address = req.body.address;
   var bank_account = req.body.bank_account;
   var bank_name = req.body.bank_name;
-  Customer.update({
+  Transaction.update({
     name,
     address,
     bank_account,
     bank_name,
   },{
-    where: { customer_id: id }
+    where: { transaction_id: id }
   }).then((error, response) => {
     if (error) throw error;
     res.json({
@@ -59,8 +59,8 @@ router.put('/', function(req, res) {
 
 router.delete('/', function(req, res) {
   var id = req.body.id;
-  Customer.destroy({
-    where: { customer_id: id },
+  Transaction.destroy({
+    where: { transaction_id: id },
   });
 });
 

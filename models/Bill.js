@@ -25,6 +25,10 @@ module.exports = (sequelize, type) => {
       type: type.INTEGER,
       allowNull: false
     },
+    expired_date: {
+      type: type.DATE,
+      allowNull: false,
+    },
     detail: type.STRING(128)
   });
 };
