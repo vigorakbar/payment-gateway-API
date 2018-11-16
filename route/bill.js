@@ -7,7 +7,7 @@ router.get('/:id', function(req, res) {
   Bill.findOne({ where: {id} }).then((error, bill) => {
     if (error) throw error;
     res.json({
-      id: bill.bill_id,
+      bill_id: bill.bill_id,
       name: bill.name,
       address: bill.address,
       bank_account: bill.bank_account,
@@ -36,7 +36,7 @@ router.post('/', function(req, res) {
 });
 
 router.put('/', function(req, res) {
-  var id = req.body.id;
+  var bill_id = req.body.bill_id;
   var name = req.body.name;
   var address = req.body.address;
   var bank_account = req.body.bank_account;
@@ -47,7 +47,7 @@ router.put('/', function(req, res) {
     bank_account,
     bank_name,
   },{
-    where: { bill_id: id }
+    where: { bill_id }
   }).then((error, response) => {
     if (error) throw error;
     res.json({
@@ -58,9 +58,9 @@ router.put('/', function(req, res) {
 });
 
 router.delete('/', function(req, res) {
-  var id = req.body.id;
+  var bill_id = req.body.bill_id;
   Bill.destroy({
-    where: { bill_id: id },
+    where: { bill_id },
   });
 });
 

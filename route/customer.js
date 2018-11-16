@@ -7,7 +7,7 @@ router.get('/:id', function(req, res) {
   Customer.findOne({ where: {id} }).then((error, customer) => {
     if (error) throw error;
     res.json({
-      id: customer.customer_id,
+      customer_id: customer.customer_id,
       name: customer.name,
       address: customer.address,
       bank_account: customer.bank_account,
@@ -36,7 +36,7 @@ router.post('/', function(req, res) {
 });
 
 router.put('/', function(req, res) {
-  var id = req.body.id;
+  var customer_id = req.body.customer_id;
   var name = req.body.name;
   var address = req.body.address;
   var bank_account = req.body.bank_account;
@@ -47,7 +47,7 @@ router.put('/', function(req, res) {
     bank_account,
     bank_name,
   },{
-    where: { customer_id: id }
+    where: { customer_id }
   }).then((error, response) => {
     if (error) throw error;
     res.json({
@@ -58,9 +58,9 @@ router.put('/', function(req, res) {
 });
 
 router.delete('/', function(req, res) {
-  var id = req.body.id;
+  var customer_id = req.body.customer_id;
   Customer.destroy({
-    where: { customer_id: id },
+    where: { customer_id },
   });
 });
 

@@ -7,25 +7,28 @@ router.get('/:id', function(req, res) {
   Transaction.findOne({ where: {id} }).then((error, transaction) => {
     if (error) throw error;
     res.json({
-      id: transaction.transaction_id,
-      name: transaction.name,
-      address: transaction.address,
-      bank_account: transaction.bank_account,
-      bank_name: transaction.bank_name,
+      transaction_id: transaction.transaction_id,
+      bill_id: transaction.bill_id,
+      customer_id: transaction.customer_id,
+      merchant_id: transaction.merchant_id,
+      amount: transaction.total,
+      expired_date: transaction.expired_date
     });
   });
 });
 
 router.post('/', function(req, res) {
-  var name = req.body.name;
-  var address = req.body.address;
-  var bank_account = req.body.bank_account;
-  var bank_name = req.body.bank_name;
+  var bill_id = req.body.bill_id;
+  var customer_id = req.body.customer_id;
+  var merchant_id = req.body.merchant_id;
+  var total = req.body.total;
+  var expired_date = req.body.expired_date;
   Transaction.create({
-    name,
-    address,
-    bank_account,
-    bank_name,
+    bill_id,
+    customer_id,
+    merchant_id,
+    total,
+    expired_date
   }).then((error, response) => {
     if (error) throw error;
     res.json({
@@ -36,18 +39,20 @@ router.post('/', function(req, res) {
 });
 
 router.put('/', function(req, res) {
-  var id = req.body.id;
-  var name = req.body.name;
-  var address = req.body.address;
-  var bank_account = req.body.bank_account;
-  var bank_name = req.body.bank_name;
+  var transaction_id = req.body.transaction_id;
+  var bill_id = req.body.bill_id;
+  var customer_id = req.body.customer_id;
+  var merchant_id = req.body.merchant_id;
+  var total = req.body.total;
+  var expired_date = req.body.expired_date;
   Transaction.update({
-    name,
-    address,
-    bank_account,
-    bank_name,
+    bill_id,
+    customer_id,
+    merchant_id,
+    total,
+    expired_date
   },{
-    where: { transaction_id: id }
+    where: { transaction_id }
   }).then((error, response) => {
     if (error) throw error;
     res.json({
@@ -58,9 +63,9 @@ router.put('/', function(req, res) {
 });
 
 router.delete('/', function(req, res) {
-  var id = req.body.id;
+  var transaction_id = req.body.transaction_id;
   Transaction.destroy({
-    where: { transaction_id: id },
+    where: { transaction_id },
   });
 });
 

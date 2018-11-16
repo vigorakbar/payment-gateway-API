@@ -7,7 +7,7 @@ router.get('/:id', function(req, res) {
   Merchant.findOne({ where: {id} }).then((error, merchant) => {
     if (error) throw error;
     res.json({
-      id: merchant.merchant_id,
+      merchant_id: merchant.merchant_id,
       name: merchant.name,
       address: merchant.address,
       bank_account: merchant.bank_account,
@@ -36,7 +36,7 @@ router.post('/', function(req, res) {
 });
 
 router.put('/', function(req, res) {
-  var id = req.body.id;
+  var merchant_id = req.body.merchant_id;
   var name = req.body.name;
   var address = req.body.address;
   var bank_account = req.body.bank_account;
@@ -47,7 +47,7 @@ router.put('/', function(req, res) {
     bank_account,
     bank_name,
   },{
-    where: { merchant_id: id }
+    where: { merchant_id }
   }).then((error, response) => {
     if (error) throw error;
     res.json({
@@ -58,9 +58,9 @@ router.put('/', function(req, res) {
 });
 
 router.delete('/', function(req, res) {
-  var id = req.body.id;
+  var merchant_id = req.body.merchant_id;
   Merchant.destroy({
-    where: { merchant_id: id },
+    where: { merchant_id },
   });
 });
 
