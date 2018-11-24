@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const Bill = require('../models/Bill');
+const { Bill } = require(appRoot + '/helpers/sequelize');
 
 router.get('/:id', function(req, res) {
   var id = req.params.id;
@@ -17,21 +17,31 @@ router.get('/:id', function(req, res) {
 });
 
 router.post('/', function(req, res) {
+  var email = req.body.email;
   var name = req.body.name;
   var address = req.body.address;
   var bank_account = req.body.bank_account;
   var bank_name = req.body.bank_name;
   Bill.create({
+    email,
     name,
     address,
     bank_account,
     bank_name,
-  }).then((error, response) => {
-    if (error) throw error;
+  }).then(response => {
     res.json({
-      id: response.id,
-      status: "create success",
+      status: 200,
+      message: "create bill success",
+      data: response
     });
+  })
+  .catch(err => {
+    console.error(err);
+    res.json({
+      status: 500,
+      message: "Error occured",
+      data: err
+    })
   });
 });
 

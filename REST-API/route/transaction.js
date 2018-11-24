@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const Transaction = require('../models/Transaction');
+const { Transaction } = require(appRoot + '/helpers/sequelize');
 
 router.get('/:id', function(req, res) {
   var id = req.params.id;

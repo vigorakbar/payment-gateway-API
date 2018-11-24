@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const Customer = require('../models/Customer');
+const { Customer } = require(appRoot + '/helpers/sequelize');
 
 router.get('/:id', function(req, res) {
+  console.log(Customer);
   var id = req.params.id;
   Customer.findOne({ where: {id} }).then((error, customer) => {
     if (error) throw error;
@@ -13,6 +14,9 @@ router.get('/:id', function(req, res) {
       bank_account: customer.bank_account,
       bank_name: customer.bank_name,
     });
+  })
+  .catch((error) => {
+    console.error(error);
   });
 });
 
@@ -26,12 +30,15 @@ router.post('/', function(req, res) {
     address,
     bank_account,
     bank_name,
-  }).then((error, response) => {
-    if (error) throw error;
+  }).then(response => {
     res.json({
-      id: response.id,
-      status: "create success",
+      status: 200,
+      message: "create customer success",
+      data: response
     });
+  })
+  .catch(error => {
+    console.error(error);
   });
 });
 

@@ -2,11 +2,11 @@ module.exports = (sequelize, type) => {
   return sequelize.define('bill', {
     bill_id: {
       type: type.UUID,
-      defaultValue: type.UUIDV1,
+      defaultValue: type.UUIDV4,
       primaryKey: true
     },
     customer_id: {
-      type: type.UUID,
+      type: type.INTEGER,
       allowNull: false,
       references: {
         model: 'customers',
@@ -14,7 +14,7 @@ module.exports = (sequelize, type) => {
       }
     },
     merchant_id: {
-      type: type.UUID,
+      type: type.INTEGER,
       allowNull: false,
       references: {
         model: 'merchants',
@@ -28,6 +28,7 @@ module.exports = (sequelize, type) => {
     expired_date: {
       type: type.DATE,
       allowNull: false,
+      defaultValue: type.NOW()
     },
     detail: type.STRING(128)
   });

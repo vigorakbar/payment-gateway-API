@@ -2,7 +2,7 @@ module.exports = (sequelize, type) => {
   return sequelize.define('transaction', {
     transaction_id: {
       type: type.UUID,
-      defaultValue: type.UUIDV1,
+      defaultValue: type.UUIDV4,
       primaryKey: true
     },
     bill_id: {
@@ -14,7 +14,7 @@ module.exports = (sequelize, type) => {
       }
     },
     customer_id: {
-      type: type.UUID,
+      type: type.INTEGER,
       allowNull: false,
       references: {
         model: 'customers',
@@ -22,7 +22,7 @@ module.exports = (sequelize, type) => {
       }
     },
     merchant_id: {
-      type: type.UUID,
+      type: type.INTEGER,
       allowNull: false,
       references: {
         model: 'merchants',
