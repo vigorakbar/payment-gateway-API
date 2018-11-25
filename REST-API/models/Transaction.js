@@ -13,12 +13,12 @@ module.exports = (sequelize, type) => {
         key: 'bill_id'
       }
     },
-    customer_id: {
-      type: type.INTEGER,
+    customer_email: {
+      type: type.STRING(64),
       allowNull: false,
       references: {
         model: 'customers',
-        key: 'customer_id'
+        key: 'email'
       }
     },
     merchant_id: {

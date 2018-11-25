@@ -3,20 +3,39 @@ var router = express.Router();
 const { Merchant } = require(appRoot + '/helpers/sequelize');
 
 router.get('/:id', function(req, res) {
-  var id = req.params.id;
-  Merchant.findOne({ where: {id} }).then((error, merchant) => {
-    if (error) throw error;
-    res.json({
-      merchant_id: merchant.merchant_id,
-      name: merchant.name,
-      address: merchant.address,
-      bank_account: merchant.bank_account,
-      bank_name: merchant.bank_name,
-    });
+  const response = {
+    status: 300,
+    message: '',
+    data: ''
+  };
+  var merchant_id = req.params.id;
+  Merchant.findOne({ where: {merchant_id} }).then(merchant => {
+    if (merchant !== null){
+      response.status = 200;
+      response.message = 'Merchant data found';
+      response.data = merchant;
+    } else {
+      response.status = 201;
+      response.message = 'Merchant data not found';
+    }
+    res.json(response);
+  })
+  .catch((error) => {
+    response.status = 500;
+    response.message = 'Error occurred';
+    response.data = error;
+    res.json(response);
+    console.error(error);
   });
 });
 
 router.post('/', function(req, res) {
+  const response = {
+    status: 300,
+    message: '',
+    data: ''
+  };
+  var username = req.body.username;
   var name = req.body.name;
   var address = req.body.address;
   var bank_account = req.body.bank_account;
@@ -26,12 +45,28 @@ router.post('/', function(req, res) {
     address,
     bank_account,
     bank_name,
-  }).then((error, response) => {
-    if (error) throw error;
-    res.json({
-      id: response.id,
-      status: "create success",
+  }).then(() => {
+    Merchant.findOrCreate({
+      where: { username }
     });
+  })
+  .spread((merchant, created) => {
+    if (created) {
+      response.status = 200;
+      response.message = 'Merchant id created';
+      response.data = merchant;
+    } else {
+      response.status = 201;
+      response.message = 'Merchant id already registered';
+    }
+    res.json(response);
+  })
+  .catch(error => {
+    response.status = 500;
+    response.message = 'Error occurred';
+    response.data = error;
+    res.json(response);
+    console.error(error);
   });
 });
 
@@ -48,20 +83,25 @@ router.put('/', function(req, res) {
     bank_name,
   },{
     where: { merchant_id }
-  }).then((error, response) => {
-    if (error) throw error;
+  }).then(response => {
     res.json({
-      id: response.id,
-      status: "update success",
+      response: response
     });
+  })
+  .catch(error => {
+    response.status = 500;
+    response.message = 'Error occurred';
+    response.data = error;
+    res.json(response);
+    console.log(error);
   });
 });
 
-router.delete('/', function(req, res) {
+/*router.delete('/', function(req, res) {
   var merchant_id = req.body.merchant_id;
   Merchant.destroy({
     where: { merchant_id },
   });
-});
+});*/
 
 module.exports = router;

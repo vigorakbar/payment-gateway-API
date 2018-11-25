@@ -5,12 +5,12 @@ module.exports = (sequelize, type) => {
       defaultValue: type.UUIDV4,
       primaryKey: true
     },
-    customer_id: {
-      type: type.INTEGER,
+    customer_email: {
+      type: type.STRING(64),
       allowNull: false,
       references: {
         model: 'customers',
-        key: 'customer_id'
+        key: 'email'
       }
     },
     merchant_id: {
@@ -24,11 +24,6 @@ module.exports = (sequelize, type) => {
     total: {
       type: type.INTEGER,
       allowNull: false
-    },
-    expired_date: {
-      type: type.DATE,
-      allowNull: false,
-      defaultValue: type.NOW()
     },
     detail: type.STRING(128)
   });

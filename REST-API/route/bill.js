@@ -1,76 +1,69 @@
 var express = require('express');
 var router = express.Router();
-const { Bill } = require(appRoot + '/helpers/sequelize');
+const { Customer, Merchant, Bill } = require(appRoot + '/helpers/sequelize');
 
 router.get('/:id', function(req, res) {
-  var id = req.params.id;
-  Bill.findOne({ where: {id} }).then((error, bill) => {
-    if (error) throw error;
-    res.json({
-      bill_id: bill.bill_id,
-      name: bill.name,
-      address: bill.address,
-      bank_account: bill.bank_account,
-      bank_name: bill.bank_name,
-    });
+  const response = {
+    status: 200,
+    message: 'OK',
+    data: ''
+  };
+  var bill_id = req.params.id;
+  Bill.findOne({ where: {bill_id} }).then(bill => {
+    if (bill !== null){
+      response.message = 'Billing detail found';
+      response.data = bill;
+    } else {
+      response.status = 201;
+      response.message = 'Billing detail not found';
+    }
+    res.json(response);
+  })
+  .catch((error) => {
+    response.status = 500;
+    response.message = 'Error occurred';
+    response.data = error;
+    res.json(response);
+    console.error(error);
   });
 });
 
 router.post('/', function(req, res) {
-  var email = req.body.email;
-  var name = req.body.name;
-  var address = req.body.address;
-  var bank_account = req.body.bank_account;
-  var bank_name = req.body.bank_name;
-  Bill.create({
-    email,
-    name,
-    address,
-    bank_account,
-    bank_name,
-  }).then(response => {
-    res.json({
-      status: 200,
-      message: "create bill success",
-      data: response
-    });
-  })
-  .catch(err => {
-    console.error(err);
-    res.json({
-      status: 500,
-      message: "Error occured",
-      data: err
+  const response = {
+    status: 200,
+    message: 'OK',
+    data: ''
+  };
+  const customer_email = req.body.customer_email;
+  const merchant_id = req.body.merchant_id;
+  const total = req.body.total;
+  const detail = req.body.detail;
+  const findMerchant = Merchant.findOne({
+      where: { merchant_id }
     })
-  });
-});
+    .then(merchant => {
+      merchant !== null ? resolve() : reject();
+    });
 
-router.put('/', function(req, res) {
-  var bill_id = req.body.bill_id;
-  var name = req.body.name;
-  var address = req.body.address;
-  var bank_account = req.body.bank_account;
-  var bank_name = req.body.bank_name;
-  Bill.update({
-    name,
-    address,
-    bank_account,
-    bank_name,
-  },{
-    where: { bill_id }
-  }).then((error, response) => {
-    if (error) throw error;
-    res.json({
-      id: response.id,
-      status: "update success",
+  const insertBill = findMerchant.then(() => {
+    Bill.create({
+      customer_email,
+      merchant_id,
+      total,
+      detail
     });
   });
-});
-
-router.delete('/', function(req, res) {
-  var bill_id = req.body.bill_id;
-  Bill.destroy({
-    where: { bill_id },
+  insertBill.then(bill => {
+    response.status = 'Billing detail created';
+    response.data = bill;
+    res.json(response);
+  })
+  .catch(error => {
+    response.status = 500;
+    response.message = 'Error occurred';
+    response.data = error;
+    res.json(response);
+    console.error(error);
   });
 });
 

@@ -3,17 +3,29 @@ var router = express.Router();
 const { Transaction } = require(appRoot + '/helpers/sequelize');
 
 router.get('/:id', function(req, res) {
-  var id = req.params.id;
-  Transaction.findOne({ where: {id} }).then((error, transaction) => {
-    if (error) throw error;
-    res.json({
-      transaction_id: transaction.transaction_id,
-      bill_id: transaction.bill_id,
-      customer_id: transaction.customer_id,
-      merchant_id: transaction.merchant_id,
-      amount: transaction.total,
-      expired_date: transaction.expired_date
-    });
+  const response = {
+    status: 300,
+    message: '',
+    data: ''
+  };
+  var transaction_id = req.params.id;
+  Transaction.findOne({ where: {transaction_id} }).then(transaction => {
+    if (transaction !== null){
+      response.status = 200;
+      response.message = 'Transaction data found';
+      response.data = merchant;
+    } else {
+      response.status = 201;
+      response.message = 'Transaction data not found';
+    }
+    res.json(response);
+  })
+  .catch((error) => {
+    response.status = 500;
+    response.message = 'Error occurred';
+    response.data = error;
+    res.json(response);
+    console.error(error);
   });
 });
 
